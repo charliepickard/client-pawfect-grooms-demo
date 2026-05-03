@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import BookingCTA from '../components/BookingCTA.astro';
+import config from '../config.json';
+
+const title = `Gallery | ${config.business.name}`;
+const description = `Recent grooms and before/after photos from ${config.business.name}.`;
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/gallery">
+  <section class="section-padded">
+    <div class="container-wide">
+      <div class="max-w-2xl mb-10">
+        <p class="text-sm uppercase tracking-wider text-primary mb-3">Gallery</p>
+        <h1 class="font-heading text-4xl sm:text-5xl mb-4">Recent grooms</h1>
+        <p class="text-dark/75 text-lg leading-relaxed">
+          A selection of our recent work — every dog leaves looking and feeling their best.
+        </p>
+      </div>
+      <GalleryGrid />
+    </div>
+  </section>
+
+  <BookingCTA heading="Want this look for your dog?" />
+</BaseLayout>

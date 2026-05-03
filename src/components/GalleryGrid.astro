@@ -1,0 +1,76 @@
+---
+import config from '../config.json';
+
+interface Props {
+  /** When provided, only render the first N items from config.gallery (used by home preview). */
+  limit?: number;
+  /** "preview" hides the before/after pairing logic and just shows after-only. */
+  variant?: 'full' | 'preview';
+}
+
+const { limit, variant = 'full' } = Astro.props;
+
+type Item = (typeof config.gallery)[number];
+
+let pairs: Array<{ before?: Item; after?: Item; standalone?: Item }> = [];
+
+if (variant === 'preview') {
+  // Home page: pull first few "after" images, full-width tiles.
+  const afters = config.gallery.filter((g) => g.type === 'after');
+  const items = limit ? afters.slice(0, limit) : afters;
+  pairs = items.map((a) => ({ standalone: a }));
+} else {
+  // Full gallery: pair before + after by breed; show unpaired full-width.
+  const seen = new Set<number>();
+  const items = config.gallery as Item[];
+
+  items.forEach((item, idx) => {
+    if (seen.has(idx)) return;
+    if (item.type === 'before' && item.breed) {
+      // find matching after with same breed not yet paired
+      const matchIdx = items.findIndex(
+        (other, j) =>
+          j !== idx &&
+          !seen.has(j) &&
+          other.type === 'after' &&
+          other.breed === item.breed,
+      );
+      if (matchIdx !== -1) {
+        seen.add(idx);
+        seen.add(matchIdx);
+        pairs.push({ before: item, after: items[matchIdx] });
+        return;
+      }
+    }
+    seen.add(idx);
+    pairs.push({ standalone: item });
+  });
+
+  if (limit) pairs = pairs.slice(0, limit);
+}
+---
+
+<div class="grid gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
+  {pairs.map((pair) => {
+    if (pair.before && pair.after) {
+      return (
+        <div class="sm:col-span-2 lg:col-span-2 grid grid-cols-2 gap-2 rounded-brand overflow-hidden bg-white border border-black/5">
+          <a href={pair.before.src} target="_blank" rel="noopener noreferrer" class="block group relative">
+            <span class="absolute top-2 left-2 z-10 text-xs uppercase tracking-wider bg-dark/80 text-white px-2 py-0.5 rounded">Before</span>
+            <img src={pair.before.src} alt={pair.before.alt} loading="lazy" decoding="async" class="w-full h-64 object-cover group-hover:scale-[1.02] transition-transform" />
+          </a>
+          <a href={pair.after.src} target="_blank" rel="noopener noreferrer" class="block group relative">
+            <span class="absolute top-2 left-2 z-10 text-xs uppercase tracking-wider bg-primary text-white px-2 py-0.5 rounded">After</span>
+            <img src={pair.after.src} alt={pair.after.alt} loading="lazy" decoding="async" class="w-full h-64 object-cover group-hover:scale-[1.02] transition-transform" />
+          </a>
+        </div>
+      );
+    }
+    const item = pair.standalone!;
+    return (
+      <a href={item.src} target="_blank" rel="noopener noreferrer" class="block group rounded-brand overflow-hidden bg-white border border-black/5">
+        <img src={item.src} alt={item.alt} loading="lazy" decoding="async" class="w-full h-64 object-cover group-hover:scale-[1.02] transition-transform" />
+      </a>
+    );
+  })}
+</div>

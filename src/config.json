@@ -1,0 +1,180 @@
+{
+  "business": {
+    "name": "Pawfect Grooms",
+    "tagline": "Professional dog grooming in Bristol",
+    "phone": "07700 900461",
+    "email": "hello@pawfectgrooms.co.uk",
+    "address": {
+      "street": "12 Station Road",
+      "city": "Bristol",
+      "county": "Avon",
+      "postcode": "BS1 4AA",
+      "country": "UK"
+    },
+    "openingHours": {
+      "monday":    "9:00am – 5:00pm",
+      "tuesday":   "9:00am – 5:00pm",
+      "wednesday": "9:00am – 5:00pm",
+      "thursday":  "9:00am – 5:00pm",
+      "friday":    "9:00am – 5:00pm",
+      "saturday":  "9:00am – 1:00pm",
+      "sunday":    "Closed"
+    },
+    "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d39718.78!2d-2.5879!3d51.4545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48718dc41377f375%3A0x4d6234f7d4f8c0b!2sBristol!5e0!3m2!1sen!2suk!4v1700000000000",
+    "socialLinks": {
+      "instagram": "https://instagram.com/pawfectgrooms",
+      "facebook":  "https://facebook.com/pawfectgrooms",
+      "tiktok":    ""
+    },
+    "founded": "2019",
+    "about": "We're a small family-run grooming studio in the heart of Bristol, dedicated to keeping your dog looking and feeling their best. Every dog is treated with patience, care, and a lot of love."
+  },
+
+  "brand": {
+    "primaryColor":   "#4A7C59",
+    "secondaryColor": "#F5E6D3",
+    "accentColor":    "#E8A87C",
+    "darkColor":      "#2C3E35",
+    "lightColor":     "#FAFAF8",
+    "fontHeading":    "Playfair Display",
+    "fontBody":       "Inter",
+    "borderRadius":   "0.75rem"
+  },
+
+  "booking": {
+    "calUsername":    "pawfect-grooms",
+    "calEmbedColor":  "#4A7C59",
+    "depositRequired": true,
+    "depositNote":    "A 25% deposit is required to secure your booking. This is deducted from your total on the day."
+  },
+
+  "services": [
+    {
+      "id":          "bath-brush",
+      "name":        "Bath & Brush",
+      "duration":    60,
+      "price":       35,
+      "description": "Full shampoo, conditioning rinse, blow-dry, and brush out. Leaves your dog clean, fresh, and tangle-free.",
+      "suitableFor": "All breeds",
+      "featured":    true
+    },
+    {
+      "id":          "full-groom",
+      "name":        "Full Groom",
+      "duration":    120,
+      "price":       55,
+      "description": "Everything in Bath & Brush plus scissor or clipper styling to breed standard or owner preference, nail trim, and ear clean.",
+      "suitableFor": "All breeds",
+      "featured":    true
+    },
+    {
+      "id":          "puppy-intro",
+      "name":        "Puppy Introduction",
+      "duration":    45,
+      "price":       25,
+      "description": "A gentle first grooming experience for puppies under 6 months. Short session designed to build positive associations with grooming.",
+      "suitableFor": "Puppies under 6 months",
+      "featured":    true
+    },
+    {
+      "id":          "nail-trim",
+      "name":        "Nail Trim",
+      "duration":    15,
+      "price":       12,
+      "description": "Quick nail clip and file. No bath required.",
+      "suitableFor": "All breeds",
+      "featured":    false
+    },
+    {
+      "id":          "de-shed",
+      "name":        "De-shedding Treatment",
+      "duration":    90,
+      "price":       45,
+      "description": "Specialist shampoo, deep conditioning, and high-velocity blow-dry to remove loose undercoat. Dramatically reduces shedding for 4–6 weeks.",
+      "suitableFor": "Double-coated breeds (Huskies, Labs, Golden Retrievers, etc.)",
+      "featured":    false
+    }
+  ],
+
+  "staff": [
+    {
+      "name":  "Sarah Mitchell",
+      "role":  "Owner & Head Groomer",
+      "bio":   "Sarah has been grooming dogs for over 10 years and holds a City & Guilds Level 3 in Dog Grooming. She started Pawfect Grooms in 2019 after years of working in busy salons. She specialises in doodles, spaniels, and terriers.",
+      "photo": "/images/staff/sarah.jpg",
+      "qualifications": ["City & Guilds Level 3 Dog Grooming", "First Aid for Dogs"]
+    }
+  ],
+
+  "gallery": [
+    {
+      "src":   "/images/gallery/01-cockapoo-before.jpg",
+      "alt":   "Cockapoo before full groom",
+      "type":  "before",
+      "breed": "Cockapoo"
+    },
+    {
+      "src":   "/images/gallery/01-cockapoo-after.jpg",
+      "alt":   "Cockapoo after full groom — fluffy and styled",
+      "type":  "after",
+      "breed": "Cockapoo"
+    },
+    {
+      "src":   "/images/gallery/02-golden-after.jpg",
+      "alt":   "Golden Retriever after bath and brush",
+      "type":  "after",
+      "breed": "Golden Retriever"
+    },
+    {
+      "src":   "/images/gallery/03-poodle-after.jpg",
+      "alt":   "Standard Poodle after full groom",
+      "type":  "after",
+      "breed": "Standard Poodle"
+    },
+    {
+      "src":   "/images/gallery/04-terrier-after.jpg",
+      "alt":   "Terrier after hand strip",
+      "type":  "after",
+      "breed": "Terrier"
+    }
+  ],
+
+  "reviews": [
+    {
+      "author":  "Emma T.",
+      "pet":     "Cockapoo, Biscuit",
+      "text":    "Sarah is absolutely brilliant with Biscuit. He used to be terrified of the groomer but now he trots in happily. The results are always gorgeous.",
+      "rating":  5,
+      "source":  "Google"
+    },
+    {
+      "author":  "James W.",
+      "pet":     "Golden Retriever, Archie",
+      "text":    "Best groomer in Bristol by far. Archie always comes back looking amazing and smelling great. Highly recommend the de-shedding treatment — life changing!",
+      "rating":  5,
+      "source":  "Google"
+    },
+    {
+      "author":  "Priya K.",
+      "pet":     "Labrador, Mango",
+      "text":    "Really professional service. Easy online booking, reminder email the day before, and they were running on time. Will definitely be back.",
+      "rating":  5,
+      "source":  "Facebook"
+    }
+  ],
+
+  "seo": {
+    "siteTitle":          "Pawfect Grooms | Dog Grooming in Bristol",
+    "defaultDescription": "Professional dog grooming in Bristol. Book online for bath & brush, full groom, and puppy introductions. Friendly, patient groomers.",
+    "siteUrl":            "https://www.pawfectgrooms.co.uk",
+    "ogImage":            "/images/og-image.jpg",
+    "googleAnalyticsId":  "",
+    "plausibleDomain":    ""
+  },
+
+  "legal": {
+    "businessLegalName":  "Pawfect Grooms Ltd",
+    "vatNumber":          "",
+    "cancellationPolicy": "We require 48 hours notice to cancel or reschedule your appointment. Cancellations with less than 48 hours notice will forfeit the deposit."
+  }
+}

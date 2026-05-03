@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import config from '../config.json';
+
+const title = `Terms & Conditions | ${config.business.name}`;
+const description = `Terms and conditions for booking grooming appointments with ${config.business.name}.`;
+const lastUpdated = 'May 2026';
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/terms">
+  <section class="section-padded">
+    <div class="container-narrow">
+      <p class="text-sm uppercase tracking-wider text-primary mb-3">Legal</p>
+      <h1 class="font-heading text-4xl sm:text-5xl mb-2">Terms & Conditions</h1>
+      <p class="text-sm text-dark/60 mb-10">Last updated: {lastUpdated}</p>
+
+      <article class="space-y-6 text-dark/85 leading-relaxed">
+        <p>
+          These terms apply when you book a grooming appointment with
+          {config.legal.businessLegalName || config.business.name} ("we", "us"). By booking,
+          you agree to them.
+        </p>
+
+        <h2 class="font-heading text-2xl pt-4">1. Bookings</h2>
+        <p>
+          Appointments can be booked online via our website or by phone on
+          {config.business.phone}. A booking is only confirmed once you've received our
+          confirmation email.
+        </p>
+
+        {config.booking.depositRequired && (
+          <p>
+            {config.booking.depositNote}
+          </p>
+        )}
+
+        <h2 class="font-heading text-2xl pt-4">2. Cancellation policy</h2>
+        <p>{config.legal.cancellationPolicy}</p>
+
+        <h2 class="font-heading text-2xl pt-4">3. Late arrivals</h2>
+        <p>
+          We may need to shorten or reschedule your appointment if you arrive more than 15 minutes
+          late, to avoid disrupting other clients. The full price may still apply.
+        </p>
+
+        <h2 class="font-heading text-2xl pt-4">4. Health & safety</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>All dogs must be up to date with their core vaccinations.</li>
+          <li>Please tell us about any health conditions, behaviour issues, or allergies before the appointment.</li>
+          <li>If we believe a groom is unsafe for your dog (heatstroke risk, severe matting, aggression), we reserve the right to stop and may charge for time spent.</li>
+          <li>Severely matted coats may need to be shaved short; this is sometimes the only humane option.</li>
+        </ul>
+
+        <h2 class="font-heading text-2xl pt-4">5. Liability</h2>
+        <p>
+          We take great care with every dog. In the rare event of an injury or incident, our
+          liability is limited to the cost of the service. We strongly recommend keeping pet
+          insurance.
+        </p>
+
+        <h2 class="font-heading text-2xl pt-4">6. Photos</h2>
+        <p>
+          We may take photos of your dog after their groom for our gallery and social media. If
+          you'd prefer we didn't, just let us know and we'll respect that.
+        </p>
+
+        <h2 class="font-heading text-2xl pt-4">7. Changes to these terms</h2>
+        <p>
+          We may update these terms occasionally. The date at the top of this page reflects the
+          latest version. The terms in force when you booked apply to that booking.
+        </p>
+
+        <h2 class="font-heading text-2xl pt-4">8. Contact</h2>
+        <p>
+          Questions about these terms? Email
+          <a href={`mailto:${config.business.email}`} class="text-primary hover:underline">{config.business.email}</a>.
+        </p>
+
+        {config.legal.vatNumber && (
+          <p class="text-sm text-dark/60 pt-6 border-t border-black/10">
+            VAT number: {config.legal.vatNumber}
+          </p>
+        )}
+      </article>
+    </div>
+  </section>
+</BaseLayout>

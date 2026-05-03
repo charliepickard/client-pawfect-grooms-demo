@@ -1,0 +1,49 @@
+---
+import config from '../config.json';
+
+interface Props {
+  label?: string;
+  /**
+   * Visual style.
+   *  - "accent"  (default): warm accent colour — used in header
+   *  - "primary": brand primary colour — used in body CTAs
+   *  - "outline": outlined version
+   */
+  style?: 'accent' | 'primary' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const {
+  label = 'Book Now',
+  style = 'accent',
+  size = 'md',
+  class: className = '',
+} = Astro.props;
+
+const styleClass = {
+  accent:  'btn-accent',
+  primary: 'btn-primary',
+  outline: 'btn-outline',
+}[style];
+
+const sizeClass = {
+  sm: 'text-sm px-4 py-2',
+  md: '',
+  lg: 'text-lg px-8 py-4',
+}[size];
+
+const calConfig = JSON.stringify({
+  theme: 'light',
+  styles: { branding: { brandColor: config.booking.calEmbedColor } },
+});
+---
+
+<button
+  type="button"
+  data-cal-link={config.booking.calUsername}
+  data-cal-config={calConfig}
+  class:list={[styleClass, sizeClass, className]}
+>
+  {label}
+</button>

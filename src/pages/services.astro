@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import BookingCTA from '../components/BookingCTA.astro';
+import config from '../config.json';
+
+const title = `Services & Prices | ${config.business.name}`;
+const description = `Our full list of dog grooming services and prices at ${config.business.name} in ${config.business.address.city}.`;
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/services">
+  <section class="section-padded">
+    <div class="container-wide">
+      <div class="max-w-2xl mb-12">
+        <p class="text-sm uppercase tracking-wider text-primary mb-3">Services</p>
+        <h1 class="font-heading text-4xl sm:text-5xl mb-4">Our services & prices</h1>
+        <p class="text-dark/75 text-lg leading-relaxed">
+          Every dog is different. Times below are typical for an average-sized,
+          well-behaved dog — we'll always advise on the right service for your
+          dog's breed and coat when you book.
+        </p>
+      </div>
+
+      <ServicesGrid services={config.services} />
+
+      {config.booking.depositRequired && (
+        <p class="mt-8 text-sm text-dark/70 italic">
+          {config.booking.depositNote}
+        </p>
+      )}
+    </div>
+  </section>
+
+  <BookingCTA heading="Found the right service?" />
+</BaseLayout>

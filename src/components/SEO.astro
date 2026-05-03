@@ -1,0 +1,128 @@
+---
+import config from '../config.json';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+}
+
+const { title, description, canonicalPath = '/' } = Astro.props;
+
+const pageTitle = title ?? config.seo.siteTitle;
+const pageDescription = description ?? config.seo.defaultDescription;
+const canonicalUrl = new URL(canonicalPath, config.seo.siteUrl).toString();
+const ogImageUrl = new URL(config.seo.ogImage, config.seo.siteUrl).toString();
+
+// Build LocalBusiness JSON-LD. Parse hours strings like "9:00am – 5:00pm"
+// into 24h opens/closes. Skip days where the value is "Closed".
+const dayMap = {
+  monday: 'Monday',
+  tuesday: 'Tuesday',
+  wednesday: 'Wednesday',
+  thursday: 'Thursday',
+  friday: 'Friday',
+  saturday: 'Saturday',
+  sunday: 'Sunday',
+};
+
+function parseTime(s: string): string | null {
+  // "9:00am" -> "09:00", "5:30pm" -> "17:30"
+  const m = s.trim().match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/i);
+  if (!m) return null;
+  let h = parseInt(m[1], 10);
+  const min = m[2] ? m[2] : '00';
+  const ampm = m[3].toLowerCase();
+  if (ampm === 'pm' && h < 12) h += 12;
+  if (ampm === 'am' && h === 12) h = 0;
+  return `${String(h).padStart(2, '0')}:${min}`;
+}
+
+function parseRange(s: string): { opens: string; closes: string } | null {
+  if (!s || /closed/i.test(s)) return null;
+  // accept en dash, em dash, hyphen
+  const parts = s.split(/\s*[–—-]\s*/);
+  if (parts.length !== 2) return null;
+  const opens = parseTime(parts[0]);
+  const closes = parseTime(parts[1]);
+  if (!opens || !closes) return null;
+  return { opens, closes };
+}
+
+const openingHoursSpecification = Object.entries(config.business.openingHours)
+  .map(([key, value]) => {
+    const range = parseRange(value as string);
+    if (!range) return null;
+    return {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: dayMap[key as keyof typeof dayMap],
+      opens: range.opens,
+      closes: range.closes,
+    };
+  })
+  .filter(Boolean);
+
+const sameAs = Object.values(config.business.socialLinks).filter(
+  (url) => typeof url === 'string' && url.length > 0,
+);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': config.seo.siteUrl,
+  name: config.business.name,
+  description: config.seo.defaultDescription,
+  url: config.seo.siteUrl,
+  telephone: config.business.phone,
+  email: config.business.email,
+  image: ogImageUrl,
+  priceRange: '££',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: config.business.address.street,
+    addressLocality: config.business.address.city,
+    addressRegion: config.business.address.county,
+    postalCode: config.business.address.postcode,
+    addressCountry: 'GB',
+  },
+  openingHoursSpecification,
+  ...(sameAs.length > 0 ? { sameAs } : {}),
+};
+
+const ga = config.seo.googleAnalyticsId;
+const plausible = config.seo.plausibleDomain;
+---
+
+<title>{pageTitle}</title>
+<meta name="description" content={pageDescription} />
+<link rel="canonical" href={canonicalUrl} />
+
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={pageDescription} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:site_name" content={config.business.name} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={pageDescription} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+{ga && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga}`}></script>
+    <script define:vars={{ ga }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', ga);
+    </script>
+  </>
+)}
+
+{!ga && plausible && (
+  <script defer data-domain={plausible} src="https://plausible.io/js/script.js"></script>
+)}

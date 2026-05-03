@@ -1,0 +1,35 @@
+---
+import config from '../config.json';
+
+const embedConfig = {
+  theme: 'light',
+  styles: { branding: { brandColor: config.booking.calEmbedColor } },
+};
+---
+
+{/* Cal.com inline embed. The wrapper has min-height so the page doesn't
+    collapse before Cal.com initialises. */}
+<div
+  id="cal-inline-embed"
+  class="w-full bg-white rounded-brand overflow-hidden shadow-sm"
+  style="min-height: 720px;"
+></div>
+
+<script is:inline define:vars={{
+  calUsername: config.booking.calUsername,
+  embedConfig,
+}}>
+  // Wait until Cal init has had a chance to run; safe to call repeatedly.
+  if (typeof window.Cal === 'function') {
+    window.Cal('inline', {
+      elementOrSelector: '#cal-inline-embed',
+      calLink: calUsername,
+      config: embedConfig,
+    });
+    window.Cal('ui', {
+      ...embedConfig,
+      hideEventTypeDetails: false,
+      layout: 'month_view',
+    });
+  }
+</script>

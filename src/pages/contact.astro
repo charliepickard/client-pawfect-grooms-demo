@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OpeningHours from '../components/OpeningHours.astro';
+import ContactMap from '../components/ContactMap.astro';
+import BookingCTA from '../components/BookingCTA.astro';
+import config from '../config.json';
+
+const title = `Contact | ${config.business.name}`;
+const description = `Get in touch with ${config.business.name} in ${config.business.address.city}.`;
+const phoneTel = config.business.phone.replace(/\s/g, '');
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/contact">
+  <section class="section-padded">
+    <div class="container-wide">
+      <div class="max-w-2xl mb-10">
+        <p class="text-sm uppercase tracking-wider text-primary mb-3">Contact</p>
+        <h1 class="font-heading text-4xl sm:text-5xl mb-4">Visit us</h1>
+        <p class="text-dark/75 text-lg leading-relaxed">
+          Find us, give us a ring, or send an email — whichever suits.
+        </p>
+      </div>
+
+      <div class="grid gap-10 lg:grid-cols-2">
+        <div>
+          <h2 class="font-heading text-2xl mb-4">{config.business.name}</h2>
+          <address class="not-italic text-dark/85 leading-relaxed mb-6">
+            {config.business.address.street}<br />
+            {config.business.address.city}<br />
+            {config.business.address.postcode}
+          </address>
+
+          <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-base mb-8">
+            <dt class="text-dark/60">Phone</dt>
+            <dd>
+              <a href={`tel:${phoneTel}`} class="text-primary hover:underline">{config.business.phone}</a>
+            </dd>
+            <dt class="text-dark/60">Email</dt>
+            <dd>
+              <a href={`mailto:${config.business.email}`} class="text-primary hover:underline">{config.business.email}</a>
+            </dd>
+          </dl>
+
+          <h3 class="font-heading text-xl mb-3">Opening hours</h3>
+          <OpeningHours />
+        </div>
+
+        <div>
+          <ContactMap />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <BookingCTA />
+</BaseLayout>

@@ -1,0 +1,119 @@
+# Decap CMS configuration.
+#
+# This file describes which parts of the site the client can edit via the
+# /admin GUI. The config.json file is the single source of truth for the
+# site, and Decap is configured to edit specific keys inside it via the
+# "file" collection type.
+#
+# Things the client should NOT be able to edit (business name, address,
+# brand colours, SEO siteUrl, etc.) are intentionally not exposed here.
+# Charlie updates those by editing config.json directly and pushing to GitHub.
+
+backend:
+  name: git-gateway
+  branch: main
+
+# Where uploaded images go. Decap puts them under public/images/ so they're
+# served at /images/...
+media_folder: "public/images"
+public_folder: "/images"
+
+# Where Decap caches drafts before publishing. Optional, but useful.
+publish_mode: simple
+
+collections:
+  # ---- Services ----
+  - name: "services"
+    label: "Services & Prices"
+    description: "Edit the list of grooming services, prices and descriptions."
+    files:
+      - label: "Services list"
+        name: "services_list"
+        file: "src/config.json"
+        fields:
+          - label: "Services"
+            name: "services"
+            widget: "list"
+            summary: "{{fields.name}} — £{{fields.price}}"
+            fields:
+              - { label: "ID (lowercase, no spaces)", name: "id", widget: "string", hint: "Unique short ID, e.g. full-groom" }
+              - { label: "Service name", name: "name", widget: "string" }
+              - { label: "Duration (minutes)", name: "duration", widget: "number", value_type: "int", min: 5, max: 480 }
+              - { label: "Price (£)", name: "price", widget: "number", value_type: "int", min: 0 }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Suitable for", name: "suitableFor", widget: "string", hint: "e.g. All breeds; Puppies under 6 months" }
+              - { label: "Show on home page?", name: "featured", widget: "boolean", default: false }
+
+  # ---- Gallery ----
+  - name: "gallery"
+    label: "Gallery"
+    description: "Edit the list of gallery photos. Upload images via the Photo field."
+    files:
+      - label: "Gallery photos"
+        name: "gallery_list"
+        file: "src/config.json"
+        fields:
+          - label: "Photos"
+            name: "gallery"
+            widget: "list"
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: "Photo", name: "src", widget: "image" }
+              - { label: "Description (alt text)", name: "alt", widget: "string" }
+              - label: "Type"
+                name: "type"
+                widget: "select"
+                options: ["before", "after", "general"]
+                default: "after"
+              - { label: "Breed (optional)", name: "breed", widget: "string", required: false, hint: "Used to pair before/after images." }
+
+  # ---- Reviews ----
+  - name: "reviews"
+    label: "Reviews"
+    description: "Add or edit customer testimonials shown on the home page."
+    files:
+      - label: "Reviews list"
+        name: "reviews_list"
+        file: "src/config.json"
+        fields:
+          - label: "Reviews"
+            name: "reviews"
+            widget: "list"
+            summary: "{{fields.author}} — {{fields.rating}}★"
+            fields:
+              - { label: "Author", name: "author", widget: "string" }
+              - { label: "Pet (optional)", name: "pet", widget: "string", required: false }
+              - { label: "Review text", name: "text", widget: "text" }
+              - { label: "Rating", name: "rating", widget: "number", value_type: "int", min: 1, max: 5, default: 5 }
+              - label: "Source"
+                name: "source"
+                widget: "select"
+                options: ["Google", "Facebook", "Instagram", "Direct"]
+                default: "Google"
+
+  # ---- Opening hours ----
+  - name: "hours"
+    label: "Opening Hours"
+    description: "Edit the opening hours shown on the site."
+    files:
+      - label: "Opening hours"
+        name: "hours_settings"
+        file: "src/config.json"
+        fields:
+          - label: "Business"
+            name: "business"
+            widget: "object"
+            collapsed: false
+            fields:
+              - label: "Opening hours"
+                name: "openingHours"
+                widget: "object"
+                collapsed: false
+                fields:
+                  - { label: "Monday",    name: "monday",    widget: "string", hint: "e.g. 9:00am – 5:00pm or Closed" }
+                  - { label: "Tuesday",   name: "tuesday",   widget: "string" }
+                  - { label: "Wednesday", name: "wednesday", widget: "string" }
+                  - { label: "Thursday",  name: "thursday",  widget: "string" }
+                  - { label: "Friday",    name: "friday",    widget: "string" }
+                  - { label: "Saturday",  name: "saturday",  widget: "string" }
+                  - { label: "Sunday",    name: "sunday",    widget: "string" }

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#4A7C59">
+  <!-- Simple paw print — replace per client. -->
+  <circle cx="32" cy="40" r="14"/>
+  <ellipse cx="14" cy="22" rx="6" ry="8"/>
+  <ellipse cx="50" cy="22" rx="6" ry="8"/>
+  <ellipse cx="22" cy="10" rx="5" ry="7"/>
+  <ellipse cx="42" cy="10" rx="5" ry="7"/>
+</svg>

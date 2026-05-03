@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StaffCard from '../components/StaffCard.astro';
+import BookingCTA from '../components/BookingCTA.astro';
+import config from '../config.json';
+
+const title = `About Us | ${config.business.name}`;
+const description = `Meet the team at ${config.business.name}. ${config.business.about.slice(0, 120)}`;
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/about">
+  {/* Header photo */}
+  <section class="relative h-72 sm:h-[420px] overflow-hidden">
+    <img
+      src="/images/about.jpg"
+      alt={`The ${config.business.name} studio`}
+      class="absolute inset-0 w-full h-full object-cover"
+      fetchpriority="high"
+    />
+    <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-black/55"></div>
+    <div class="relative h-full container-wide flex items-end pb-10">
+      <div class="text-white">
+        <p class="text-sm uppercase tracking-wider mb-2">About us</p>
+        <h1 class="font-heading text-4xl sm:text-5xl drop-shadow text-white">
+          The {config.business.name} story
+        </h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padded">
+    <div class="container-narrow">
+      <p class="text-lg sm:text-xl leading-relaxed text-dark/85">
+        {config.business.about}
+      </p>
+      {config.business.founded && (
+        <p class="mt-4 text-dark/65 italic">Founded {config.business.founded}.</p>
+      )}
+    </div>
+  </section>
+
+  <section class="section-padded bg-secondary/30">
+    <div class="container-narrow">
+      <h2 class="font-heading text-3xl sm:text-4xl mb-8">Meet the team</h2>
+      <div class="space-y-6">
+        {config.staff.map((member) => <StaffCard member={member} />)}
+      </div>
+    </div>
+  </section>
+
+  <BookingCTA heading="Ready to meet us?" />
+</BaseLayout>

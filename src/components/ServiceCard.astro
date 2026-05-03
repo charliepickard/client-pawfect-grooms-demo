@@ -1,0 +1,46 @@
+---
+interface Props {
+  service: {
+    id: string;
+    name: string;
+    duration: number;
+    price: number;
+    description: string;
+    suitableFor: string;
+    featured?: boolean;
+  };
+  /** When true, render the more compact homepage variant. */
+  compact?: boolean;
+}
+
+const { service, compact = false } = Astro.props;
+
+function formatDuration(mins: number): string {
+  if (mins < 60) return `${mins} min`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m === 0 ? `${h} hr` : `${h} hr ${m} min`;
+}
+---
+
+<article class="bg-white rounded-brand p-6 sm:p-7 shadow-sm border border-black/5 flex flex-col h-full">
+  <div class="flex items-start justify-between gap-4 mb-3">
+    <h3 class="font-heading text-xl sm:text-2xl text-dark">{service.name}</h3>
+    <span class="font-heading text-2xl text-primary whitespace-nowrap">£{service.price}</span>
+  </div>
+  <p class="text-xs uppercase tracking-wider text-dark/60 mb-3">
+    {formatDuration(service.duration)} · {service.suitableFor}
+  </p>
+  <p class="text-dark/80 leading-relaxed mb-5 flex-1">
+    {service.description}
+  </p>
+  {!compact && (
+    <a href="/book" class="text-primary font-semibold inline-flex items-center gap-1 hover:gap-2 transition-all">
+      Book this
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+  )}
+</article>

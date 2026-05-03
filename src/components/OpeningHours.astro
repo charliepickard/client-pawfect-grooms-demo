@@ -1,0 +1,50 @@
+---
+import config from '../config.json';
+
+interface Props {
+  /** Compact (footer) variant uses smaller type and dimmed colours. */
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+
+const dayKeys = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'] as const;
+const dayLabels: Record<typeof dayKeys[number], string> = {
+  monday: 'Monday',
+  tuesday: 'Tuesday',
+  wednesday: 'Wednesday',
+  thursday: 'Thursday',
+  friday: 'Friday',
+  saturday: 'Saturday',
+  sunday: 'Sunday',
+};
+
+// JS Date.getDay returns 0 for Sunday — map to our key order.
+const today = new Date();
+const todayKey = dayKeys[(today.getDay() + 6) % 7];
+
+const hours = config.business.openingHours;
+---
+
+<dl class:list={[compact ? 'text-sm' : 'text-base', 'space-y-1']}>
+  {dayKeys.map((key) => {
+    const value = hours[key as keyof typeof hours] as string;
+    const isClosed = /closed/i.test(value);
+    const isToday = key === todayKey;
+    return (
+      <div
+        class:list={[
+          'flex items-baseline justify-between gap-4 py-1',
+          compact ? '' : 'border-b border-black/5 last:border-0',
+          isToday && !compact ? 'font-semibold text-primary' : '',
+          isToday && compact ? 'text-white font-semibold' : '',
+        ]}
+      >
+        <dt class={isClosed ? 'opacity-60' : ''}>{dayLabels[key]}</dt>
+        <dd class:list={[isClosed ? 'opacity-60' : '', 'whitespace-nowrap']}>
+          {value}
+        </dd>
+      </div>
+    );
+  })}
+</dl>

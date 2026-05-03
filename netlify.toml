@@ -1,0 +1,26 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Decap CMS lives at /admin and is a single-page app that handles its own
+# routing client-side. Without this rewrite a refresh on /admin/#/edit/...
+# would 404.
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# The Cal.com inline embed needs to load app.cal.com in an iframe.
+# Override X-Frame-Options for the booking page only.
+[[headers]]
+  for = "/book"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"

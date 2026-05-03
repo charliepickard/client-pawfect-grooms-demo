@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import ReviewsSection from '../components/ReviewsSection.astro';
+import BookingCTA from '../components/BookingCTA.astro';
+import config from '../config.json';
+
+const featuredServices = config.services.filter((s) => s.featured);
+const reviewCount = config.reviews.length;
+const avgRating =
+  reviewCount > 0
+    ? (config.reviews.reduce((acc, r) => acc + r.rating, 0) / reviewCount).toFixed(1)
+    : '5.0';
+
+const title = `${config.business.name} | Dog Grooming in ${config.business.address.city}`;
+---
+
+<BaseLayout title={title} description={config.seo.defaultDescription} canonicalPath="/">
+  <Hero />
+
+  {/* Social proof strip */}
+  <section class="bg-secondary/40 border-y border-black/5">
+    <div class="container-narrow py-4 sm:py-5 text-center">
+      <p class="text-sm sm:text-base text-dark/80 inline-flex items-center gap-2 flex-wrap justify-center">
+        <span aria-hidden="true" class="text-accent text-lg leading-none">★★★★★</span>
+        <span>
+          Rated {avgRating} stars by our clients in {config.business.address.city}
+        </span>
+      </p>
+    </div>
+  </section>
+
+  {/* Services overview — featured only */}
+  <section class="section-padded">
+    <div class="container-wide">
+      <div class="text-center mb-10">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-3">Our most popular services</h2>
+        <p class="text-dark/70 max-w-xl mx-auto">
+          Every groom is tailored to your dog's coat, breed, and temperament.
+        </p>
+      </div>
+      <ServicesGrid services={featuredServices} />
+      <div class="text-center mt-10">
+        <a href="/services" class="btn-outline">See all services & prices</a>
+      </div>
+    </div>
+  </section>
+
+  {/* About snippet */}
+  <section class="section-padded bg-secondary/30">
+    <div class="container-wide grid gap-10 lg:grid-cols-2 items-center">
+      <div class="rounded-brand overflow-hidden shadow-sm bg-white">
+        <img
+          src="/images/about.jpg"
+          alt={`Inside the ${config.business.name} grooming studio`}
+          loading="lazy"
+          decoding="async"
+          class="w-full h-72 sm:h-96 object-cover"
+        />
+      </div>
+      <div>
+        <h2 class="font-heading text-3xl sm:text-4xl mb-4">A small studio. Big love for dogs.</h2>
+        <p class="text-dark/85 leading-relaxed mb-4">{config.business.about}</p>
+        {config.staff[0]?.qualifications?.length > 0 && (
+          <p class="text-dark/75 leading-relaxed mb-6">
+            Fully qualified — {config.staff[0].qualifications.join(' · ')}.
+          </p>
+        )}
+        <a href="/about" class="btn-outline">Meet the team</a>
+      </div>
+    </div>
+  </section>
+
+  {/* Gallery preview */}
+  <section class="section-padded">
+    <div class="container-wide">
+      <div class="text-center mb-10">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-3">Recent grooms</h2>
+        <p class="text-dark/70">A glimpse of our work.</p>
+      </div>
+      <GalleryGrid limit={3} variant="preview" />
+      <div class="text-center mt-10">
+        <a href="/gallery" class="btn-outline">See full gallery</a>
+      </div>
+    </div>
+  </section>
+
+  <ReviewsSection />
+
+  <BookingCTA />
+</BaseLayout>

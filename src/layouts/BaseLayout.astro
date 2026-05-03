@@ -1,0 +1,96 @@
+---
+import '../styles/global.css';
+import config from '../config.json';
+import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+}
+
+const { title, description, canonicalPath } = Astro.props;
+
+const headingFontParam = config.brand.fontHeading.replace(/ /g, '+');
+const bodyFontParam = config.brand.fontBody.replace(/ /g, '+');
+const fontHref = `https://fonts.googleapis.com/css2?family=${headingFontParam}:wght@500;600;700&family=${bodyFontParam}:wght@400;500;600&display=swap`;
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fontHref} />
+
+    {/* Inject brand tokens from config.json into :root so Tailwind utilities
+        (bg-primary, text-accent, etc.) and component CSS pick them up. */}
+    <style is:inline define:vars={{
+      primary:   config.brand.primaryColor,
+      secondary: config.brand.secondaryColor,
+      accent:    config.brand.accentColor,
+      dark:      config.brand.darkColor,
+      light:     config.brand.lightColor,
+      radius:    config.brand.borderRadius,
+      fontHeading: `'${config.brand.fontHeading}', serif`,
+      fontBody:    `'${config.brand.fontBody}', sans-serif`,
+    }}>
+      :root {
+        --color-primary:   var(--primary);
+        --color-secondary: var(--secondary);
+        --color-accent:    var(--accent);
+        --color-dark:      var(--dark);
+        --color-light:     var(--light);
+        --radius:          var(--radius);
+        --font-heading:    var(--fontHeading);
+        --font-body:       var(--fontBody);
+      }
+    </style>
+
+    <SEO title={title} description={description} canonicalPath={canonicalPath} />
+
+    {/* Cal.com embed loader. Loaded site-wide because the Header has a
+        "Book Now" popup button on every page. Marked async so it doesn't
+        block render. */}
+    <script is:inline>
+      (function (C, A, L) {
+        let p = function (a, ar) { a.q.push(ar); };
+        let d = C.document;
+        C.Cal = C.Cal || function () {
+          let cal = C.Cal; let ar = arguments;
+          if (!cal.loaded) {
+            cal.ns = {}; cal.q = cal.q || [];
+            d.head.appendChild(d.createElement("script")).src = A;
+            cal.loaded = true;
+          }
+          if (ar[0] === L) {
+            const api = function () { p(api, arguments); };
+            const namespace = ar[1];
+            api.q = api.q || [];
+            typeof namespace === "string"
+              ? (cal.ns[namespace] = api) && p(api, ar)
+              : p(cal, ar);
+            return;
+          }
+          p(cal, ar);
+        };
+      })(window, "https://app.cal.com/embed/embed.js", "init");
+      Cal("init", { origin: "https://app.cal.com" });
+    </script>
+  </head>
+  <body class="font-body bg-light text-dark min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookingEmbed from '../components/BookingEmbed.astro';
+import config from '../config.json';
+
+const title = `Book an Appointment | ${config.business.name}`;
+const description = `Book your dog's next groom at ${config.business.name} online.`;
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/book">
+  <section class="section-padded">
+    <div class="container-wide">
+      <div class="max-w-2xl mb-8">
+        <p class="text-sm uppercase tracking-wider text-primary mb-3">Booking</p>
+        <h1 class="font-heading text-4xl sm:text-5xl mb-4">Book your appointment</h1>
+        {config.booking.depositRequired && (
+          <p class="text-dark/75 leading-relaxed">{config.booking.depositNote}</p>
+        )}
+      </div>
+
+      <BookingEmbed />
+
+      <p class="mt-6 text-sm text-dark/60">
+        Trouble booking? Call us on
+        <a href={`tel:${config.business.phone.replace(/\s/g, '')}`} class="text-primary hover:underline">
+          {config.business.phone}
+        </a>
+        or email
+        <a href={`mailto:${config.business.email}`} class="text-primary hover:underline">
+          {config.business.email}
+        </a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

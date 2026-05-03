@@ -1,0 +1,108 @@
+---
+import config from '../config.json';
+import BookingPopupButton from './BookingPopupButton.astro';
+
+const navLinks = [
+  { href: '/',         label: 'Home' },
+  { href: '/services', label: 'Services' },
+  { href: '/about',    label: 'About' },
+  { href: '/gallery',  label: 'Gallery' },
+  { href: '/contact',  label: 'Contact' },
+];
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="sticky top-0 z-40 bg-light/90 backdrop-blur border-b border-black/5">
+  <div class="container-wide flex items-center justify-between gap-4 h-16 sm:h-20">
+    <a href="/" class="flex items-center gap-2 group" aria-label={`${config.business.name} home`}>
+      <img
+        src="/images/logo.svg"
+        alt=""
+        width="36"
+        height="36"
+        class="w-9 h-9"
+        onerror="this.style.display='none'"
+      />
+      <span class="font-heading text-xl sm:text-2xl font-semibold text-dark group-hover:opacity-80 transition-opacity">
+        {config.business.name}
+      </span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-7" aria-label="Main">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-sm font-medium transition-colors hover:text-primary',
+            currentPath === link.href ? 'text-primary' : 'text-dark/80',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <BookingPopupButton label="Book Now" />
+      <button
+        type="button"
+        id="mobile-menu-toggle"
+        class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-brand border border-black/10"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        aria-label="Open menu"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {/* Mobile menu — slide-down panel */}
+  <div
+    id="mobile-menu"
+    class="md:hidden hidden border-t border-black/5 bg-light"
+    role="dialog"
+    aria-label="Mobile menu"
+  >
+    <nav class="container-wide py-4 flex flex-col gap-2" aria-label="Mobile">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            'py-3 px-2 rounded-brand text-base font-medium transition-colors',
+            currentPath === link.href ? 'text-primary bg-secondary/40' : 'text-dark hover:bg-secondary/30',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Tiny mobile menu toggle. No framework, no library.
+  const btn = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      const isOpen = !menu.classList.contains('hidden');
+      menu.classList.toggle('hidden', isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      btn.setAttribute('aria-label', !isOpen ? 'Close menu' : 'Open menu');
+    });
+    // Close after navigation
+    menu.querySelectorAll('a').forEach((a) =>
+      a.addEventListener('click', () => {
+        menu.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-label', 'Open menu');
+      }),
+    );
+  }
+</script>

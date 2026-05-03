@@ -1,0 +1,48 @@
+---
+interface Props {
+  review: {
+    author: string;
+    pet?: string;
+    text: string;
+    rating: number;
+    source?: string;
+  };
+}
+
+const { review } = Astro.props;
+const stars = Array.from({ length: 5 }, (_, i) => i < review.rating);
+---
+
+<article class="bg-white rounded-brand p-6 shadow-sm border border-black/5 h-full flex flex-col">
+  <div class="flex items-center gap-1 mb-3" aria-label={`${review.rating} out of 5 stars`}>
+    {stars.map((filled) => (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill={filled ? 'currentColor' : 'none'}
+        stroke="currentColor"
+        stroke-width="2"
+        class="text-accent"
+        aria-hidden="true"
+      >
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      </svg>
+    ))}
+  </div>
+  <blockquote class="text-dark/85 leading-relaxed mb-4 flex-1">
+    &ldquo;{review.text}&rdquo;
+  </blockquote>
+  <footer class="text-sm text-dark/70 flex items-center justify-between gap-3">
+    <div>
+      <p class="font-semibold text-dark">{review.author}</p>
+      {review.pet && <p class="text-xs text-dark/60">{review.pet}</p>}
+    </div>
+    {review.source && (
+      <span class="text-[10px] uppercase tracking-wider bg-secondary/60 text-dark/70 px-2 py-1 rounded">
+        {review.source}
+      </span>
+    )}
+  </footer>
+</article>
