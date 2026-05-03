@@ -42,7 +42,7 @@
   },
 
   "booking": {
-    "calUsername":    "pawfect-grooms",
+    "calUsername":    "pawfect-grooms-demo",
     "calEmbedColor":  "#4A7C59",
     "depositRequired": true,
     "depositNote":    "A 25% deposit is required to secure your booking. This is deducted from your total on the day."
