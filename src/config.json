@@ -166,7 +166,7 @@
   "seo": {
     "siteTitle":          "Pawfect Grooms | Dog Grooming in Bristol",
     "defaultDescription": "Professional dog grooming in Bristol. Book online for bath & brush, full groom, and puppy introductions. Friendly, patient groomers.",
-    "siteUrl":            "https://www.pawfectgrooms.co.uk",
+    "siteUrl":            "https://pawfect-grooms-demo.netlify.app",
     "ogImage":            "/images/og-image.jpg",
     "googleAnalyticsId":  "",
     "plausibleDomain":    ""
