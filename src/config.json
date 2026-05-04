@@ -172,6 +172,11 @@
     "plausibleDomain":    ""
   },
 
+  "images": {
+    "hero":  "/images/hero.jpg",
+    "about": "/images/about.jpg"
+  },
+
   "legal": {
     "businessLegalName":  "Pawfect Grooms Ltd",
     "vatNumber":          "",
