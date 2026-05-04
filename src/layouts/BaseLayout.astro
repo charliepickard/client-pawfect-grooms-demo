@@ -29,7 +29,13 @@ const fontHref = `https://fonts.googleapis.com/css2?family=${headingFontParam}:w
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href={fontHref} />
+    {/* Load fonts asynchronously — avoids a render-blocking request.
+        The media="print" trick causes the browser to fetch without blocking,
+        then onload swaps it to media="all" so styles apply immediately.
+        display=swap is already in the URL so text stays visible during load. */}
+    <link rel="preload" as="style" href={fontHref} />
+    <link rel="stylesheet" href={fontHref} media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href={fontHref} /></noscript>
 
     {/* Inject brand tokens from config.json into :root so Tailwind utilities
         (bg-primary, text-accent, etc.) and component CSS pick them up. */}
@@ -95,18 +101,22 @@ const fontHref = `https://fonts.googleapis.com/css2?family=${headingFontParam}:w
 
     {/* Netlify Identity widget — loaded site-wide so that invite/recovery
         links (which land on the homepage with a #invite_token hash) are
-        intercepted and the user is shown the password-setup modal. */}
-    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+        intercepted and the user is shown the password-setup modal.
+        defer keeps it off the critical path; DOMContentLoaded fires after
+        deferred scripts have run so netlifyIdentity is always defined by then. */}
+    <script is:inline defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script is:inline>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on('init', function(user) {
-          if (!user) {
-            window.netlifyIdentity.on('login', function() {
-              document.location.href = '/admin/';
-            });
-          }
-        });
-      }
+      document.addEventListener('DOMContentLoaded', function () {
+        if (window.netlifyIdentity) {
+          window.netlifyIdentity.on('init', function (user) {
+            if (!user) {
+              window.netlifyIdentity.on('login', function () {
+                document.location.href = '/admin/';
+              });
+            }
+          });
+        }
+      });
     </script>
   </body>
 </html>
