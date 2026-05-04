@@ -37,11 +37,11 @@ const hours = config.business.openingHours;
           'flex items-baseline justify-between gap-4 py-1',
           compact ? '' : 'border-b border-black/5 last:border-0',
           isToday && !compact ? 'font-semibold text-primary' : '',
-          isToday && compact ? 'text-white font-semibold' : '',
+          isToday && compact  ? 'text-white font-semibold' : compact ? 'text-white/60' : '',
         ]}
       >
-        <dt class={isClosed ? 'opacity-60' : ''}>{dayLabels[key]}</dt>
-        <dd class:list={[isClosed ? 'opacity-60' : '', 'whitespace-nowrap']}>
+        <dt class={isClosed ? 'opacity-50' : ''}>{dayLabels[key]}</dt>
+        <dd class:list={[isClosed ? 'opacity-50' : '', 'whitespace-nowrap']}>
           {value}
         </dd>
       </div>
