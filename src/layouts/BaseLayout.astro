@@ -92,5 +92,21 @@ const fontHref = `https://fonts.googleapis.com/css2?family=${headingFontParam}:w
       <slot />
     </main>
     <Footer />
+
+    {/* Netlify Identity widget — loaded site-wide so that invite/recovery
+        links (which land on the homepage with a #invite_token hash) are
+        intercepted and the user is shown the password-setup modal. */}
+    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', function(user) {
+          if (!user) {
+            window.netlifyIdentity.on('login', function() {
+              document.location.href = '/admin/';
+            });
+          }
+        });
+      }
+    </script>
   </body>
 </html>
